@@ -7,6 +7,7 @@ import { Genre } from './entities/genre.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Genre])],
+  exports: [TypeOrmModule, GenresService],
   controllers: [GenresController],
   providers: [GenresService],
 })

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { MovieDirection } from 'src/movies/entities/direction.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'directors' })
 export class Director {
@@ -10,4 +11,7 @@ export class Director {
 
   @Column({ name: 'last_name', nullable: false })
   lastName: string;
+
+  @OneToMany(() => MovieDirection, (movieDirections) => movieDirections.movie)
+  movieDirection: MovieDirection[];
 }

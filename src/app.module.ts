@@ -8,6 +8,7 @@ import { ActorsModule } from './actors/actors.module';
 import { DirectorsModule } from './directors/directors.module';
 import { GenresModule } from './genres/genres.module';
 import { ReviewersModule } from './reviewers/reviewers.module';
+import { RatingsModule } from './ratings/ratings.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { ReviewersModule } from './reviewers/reviewers.module';
       port: 8001,
       username: 'root',
       password: 'erik2202',
-      database: 'postgres',
+      database: 'root',
       entities: [__dirname + '/**/*.entity{.js,.ts}'],
       synchronize: true,
     }),
@@ -28,6 +29,7 @@ import { ReviewersModule } from './reviewers/reviewers.module';
     DirectorsModule,
     GenresModule,
     ReviewersModule,
+    RatingsModule,
   ],
 })
 export class AppModule {}

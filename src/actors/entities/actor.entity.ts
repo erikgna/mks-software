@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { MovieCast } from 'src/movies/entities/cast.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'actors' })
 export class Actor {
@@ -13,4 +14,7 @@ export class Actor {
 
   @Column({ nullable: false })
   gender: string;
+
+  @OneToMany(() => MovieCast, (movieCast) => movieCast.actor)
+  movieCast: MovieCast[];
 }

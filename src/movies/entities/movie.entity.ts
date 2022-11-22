@@ -1,3 +1,4 @@
+import { Rating } from 'src/ratings/entities/rating.entity';
 import {
   Entity,
   Column,
@@ -5,7 +6,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { MovieCast } from './cast.entity';
+import { MovieDirection } from './direction.entity';
+import { MovieGenre } from './genre.entity';
 
 @Entity({ name: 'movies' })
 export class Movie {
@@ -29,6 +34,24 @@ export class Movie {
 
   @Column({ nullable: false })
   releaseCountry: string;
+
+  @OneToMany(() => Rating, (rating) => rating.movie, { onDelete: 'CASCADE' })
+  ratings: Rating[];
+
+  @OneToMany(() => MovieDirection, (movieDirection) => movieDirection.movie, {
+    onDelete: 'CASCADE',
+  })
+  movieDirection: MovieDirection[];
+
+  @OneToMany(() => MovieGenre, (movieGenre) => movieGenre.movie, {
+    onDelete: 'CASCADE',
+  })
+  movieGenre: MovieGenre[];
+
+  @OneToMany(() => MovieCast, (movieCast) => movieCast.movie, {
+    onDelete: 'CASCADE',
+  })
+  movieCast: MovieCast[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;

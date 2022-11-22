@@ -18,4 +18,16 @@ export class CreateMovieDto {
 
   @IsNotEmpty()
   releaseCountry: string;
+
+  @IsNotEmpty()
+  directorsID: string[];
+
+  @IsNotEmpty()
+  castsID: {
+    role: string;
+    actorID: string;
+  }[];
+
+  @IsNotEmpty()
+  genresID: string[];
 }

@@ -8,6 +8,7 @@ import { Actor } from './entities/actor.entity';
 @Module({
   controllers: [ActorsController],
   imports: [TypeOrmModule.forFeature([Actor])],
+  exports: [TypeOrmModule, ActorsService],
   providers: [ActorsService],
 })
 export class ActorsModule {}
