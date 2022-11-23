@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  movies:
+    container_name: movies
+    build: .
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    command: npx nest start --watch
+    depends_on:
+      - redis
+      - postgres
+  redis:
+    image: redislabs/rejson:2.0.0
+    container_name: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+  postgres:
+    image: postgres
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: root
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: erik2202
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+volumes:
+  redis:
+    driver: local
+  postgres:
+    driver: local
