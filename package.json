@@ -5,6 +5,8 @@
   "description": "Nest TypeScript starter repository",
   "license": "MIT",
   "scripts": {
+    "predeploy": "npm install && npm run build",
+    "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
