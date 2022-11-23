@@ -1,12 +1,12 @@
-import { Rating } from 'src/ratings/entities/rating.entity';
+import { Rating } from '../../ratings/entities/rating.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  DeleteDateColumn,
   OneToMany,
+  BeforeInsert,
 } from 'typeorm';
 import { MovieCast } from './cast.entity';
 import { MovieDirection } from './direction.entity';
@@ -17,7 +17,7 @@ export class Movie {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   title: string;
 
   @Column({ nullable: false })
@@ -29,28 +29,22 @@ export class Movie {
   @Column({ nullable: false })
   language: string;
 
-  @Column({ nullable: false })
-  releaseDate: string;
+  @Column({ type: 'date', nullable: false })
+  releaseDate: Date;
 
   @Column({ nullable: false })
   releaseCountry: string;
 
-  @OneToMany(() => Rating, (rating) => rating.movie, { onDelete: 'CASCADE' })
+  @OneToMany(() => Rating, (rating) => rating.movie)
   ratings: Rating[];
 
-  @OneToMany(() => MovieDirection, (movieDirection) => movieDirection.movie, {
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => MovieDirection, (movieDirection) => movieDirection.movie)
   movieDirection: MovieDirection[];
 
-  @OneToMany(() => MovieGenre, (movieGenre) => movieGenre.movie, {
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => MovieGenre, (movieGenre) => movieGenre.movie)
   movieGenre: MovieGenre[];
 
-  @OneToMany(() => MovieCast, (movieCast) => movieCast.movie, {
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => MovieCast, (movieCast) => movieCast.movie)
   movieCast: MovieCast[];
 
   @CreateDateColumn({ name: 'created_at' })
@@ -59,6 +53,8 @@ export class Movie {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: string;
 
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: string;
+  @BeforeInsert()
+  transformDate() {
+    this.releaseDate = new Date(this.releaseDate);
+  }
 }

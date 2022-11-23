@@ -24,11 +24,13 @@ export class DirectorsService {
   }
 
   findOne(id: string) {
-    return this.directorsRepository.findOneBy({ id });
+    return this.directorsRepository.findOneByOrFail({ id });
   }
 
   async update(id: string, updateDirectorDto: UpdateDirectorDto) {
-    const directorToUpdate = await this.directorsRepository.findOneBy({ id });
+    const directorToUpdate = await this.directorsRepository.findOneByOrFail({
+      id,
+    });
 
     return this.directorsRepository.save({
       ...directorToUpdate,
@@ -37,7 +39,9 @@ export class DirectorsService {
   }
 
   async remove(id: string) {
-    const directorToRemove = await this.directorsRepository.findOneBy({ id });
+    const directorToRemove = await this.directorsRepository.findOneByOrFail({
+      id,
+    });
 
     return this.directorsRepository.remove(directorToRemove);
   }

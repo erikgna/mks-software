@@ -1,11 +1,10 @@
-import { Movie } from 'src/movies/entities/movie.entity';
-import { Reviewer } from 'src/reviewers/entities/reviewer.entity';
+import { Movie } from '../../movies/entities/movie.entity';
+import { Reviewer } from '../../reviewers/entities/reviewer.entity';
 import {
   Entity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  DeleteDateColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -15,10 +14,12 @@ export class Rating {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Movie, (movie) => movie.ratings)
+  @ManyToOne(() => Movie, (movie) => movie.ratings, { onDelete: 'CASCADE' })
   movie: Movie;
 
-  @ManyToOne(() => Reviewer, (reviewer) => reviewer.ratings)
+  @ManyToOne(() => Reviewer, (reviewer) => reviewer.ratings, {
+    onDelete: 'CASCADE',
+  })
   reviewer: Reviewer;
 
   @Column({ nullable: false, default: 5 })
@@ -29,7 +30,12 @@ export class Rating {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: string;
+}
 
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: string;
+export class RatingTest extends Rating {
+  constructor(rating?: Partial<Rating>) {
+    super();
+    this.id = rating.id;
+    this.stars = rating.stars;
+  }
 }

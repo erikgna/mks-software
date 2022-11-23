@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MoviesService } from 'src/movies/movies.service';
-import { ReviewersService } from 'src/reviewers/reviewers.service';
 import { Repository } from 'typeorm';
 
 import { CreateRatingDto } from './dto/create-rating.dto';
@@ -13,21 +11,23 @@ export class RatingsService {
   constructor(
     @InjectRepository(Rating)
     private readonly ratingsRepository: Repository<Rating>,
-
-    private readonly reviewersService: ReviewersService,
-    private readonly moviesService: MoviesService,
   ) {}
 
   async create(createRatingDto: CreateRatingDto) {
-    const movie = await this.moviesService.findOne(createRatingDto.movie);
-    const reviewer = await this.reviewersService.findOne(
-      createRatingDto.reviewer,
-    );
+    const checkRating = await this.ratingsRepository.find({
+      where: {
+        movie: { id: createRatingDto.movie },
+        reviewer: { id: createRatingDto.reviewer },
+      },
+    });
+    if (checkRating.length > 0) {
+      throw Error();
+    }
 
     return this.ratingsRepository.save(
       this.ratingsRepository.create({
-        reviewer,
-        movie,
+        reviewer: { id: createRatingDto.reviewer },
+        movie: { id: createRatingDto.movie },
         stars: createRatingDto.stars,
       }),
     );
@@ -46,11 +46,11 @@ export class RatingsService {
   }
 
   findOne(id: string) {
-    return this.ratingsRepository.findOneBy({ id });
+    return this.ratingsRepository.findOneByOrFail({ id });
   }
 
   async update(id: string, updateRatingDto: UpdateRatingDto) {
-    const ratingToUpdate = await this.ratingsRepository.findOneBy({ id });
+    const ratingToUpdate = await this.ratingsRepository.findOneByOrFail({ id });
 
     return this.ratingsRepository.save({
       ...ratingToUpdate,
@@ -59,7 +59,7 @@ export class RatingsService {
   }
 
   async remove(id: string) {
-    const ratingToRemove = await this.ratingsRepository.findOneBy({ id });
+    const ratingToRemove = await this.ratingsRepository.findOneByOrFail({ id });
 
     return this.ratingsRepository.remove(ratingToRemove);
   }

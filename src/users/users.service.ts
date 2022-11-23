@@ -20,15 +20,24 @@ export class UsersService {
   }
 
   findAll() {
-    return this.usersRepository.find();
+    return this.usersRepository.find({
+      select: [
+        'id',
+        'email',
+        'firstName',
+        'lastName',
+        'createdAt',
+        'updatedAt',
+      ],
+    });
   }
 
   findOne(email: string) {
-    return this.usersRepository.findOneBy({ email });
+    return this.usersRepository.findOneByOrFail({ email });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const userToUpdate = await this.usersRepository.findOneBy({ id });
+    const userToUpdate = await this.usersRepository.findOneByOrFail({ id });
 
     return this.usersRepository.save({
       ...userToUpdate,
@@ -37,7 +46,7 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    const userToRemove = await this.usersRepository.findOneBy({ id });
+    const userToRemove = await this.usersRepository.findOneByOrFail({ id });
 
     return this.usersRepository.remove(userToRemove);
   }

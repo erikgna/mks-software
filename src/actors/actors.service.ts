@@ -24,11 +24,11 @@ export class ActorsService {
   }
 
   findOne(id: string) {
-    return this.actorsRepository.findOneBy({ id });
+    return this.actorsRepository.findOneByOrFail({ id });
   }
 
   async update(id: string, updateMovieDto: UpdateActorDto) {
-    const actorToUpdate = await this.actorsRepository.findOneBy({ id });
+    const actorToUpdate = await this.actorsRepository.findOneByOrFail({ id });
 
     return this.actorsRepository.save({
       ...actorToUpdate,
@@ -37,7 +37,7 @@ export class ActorsService {
   }
 
   async remove(id: string) {
-    const actorToRemove = await this.actorsRepository.findOneBy({ id });
+    const actorToRemove = await this.actorsRepository.findOneByOrFail({ id });
 
     return this.actorsRepository.remove(actorToRemove);
   }

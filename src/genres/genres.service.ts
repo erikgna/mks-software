@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -24,11 +24,11 @@ export class GenresService {
   }
 
   findOne(id: string) {
-    return this.genresRepository.findOneBy({ id });
+    return this.genresRepository.findOneByOrFail({ id });
   }
 
   async update(id: string, updateGenreDto: UpdateGenreDto) {
-    const genreToUpdate = await this.genresRepository.findOneBy({ id });
+    const genreToUpdate = await this.genresRepository.findOneByOrFail({ id });
 
     return this.genresRepository.save({
       ...genreToUpdate,
@@ -37,7 +37,7 @@ export class GenresService {
   }
 
   async remove(id: string) {
-    const genreToRemove = await this.genresRepository.findOneBy({ id });
+    const genreToRemove = await this.genresRepository.findOneByOrFail({ id });
 
     return this.genresRepository.remove(genreToRemove);
   }

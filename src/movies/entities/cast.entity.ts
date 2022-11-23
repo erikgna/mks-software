@@ -1,5 +1,5 @@
-import { Actor } from 'src/actors/entities/actor.entity';
-import { Movie } from 'src/movies/entities/movie.entity';
+import { Actor } from '../../actors/entities/actor.entity';
+import { Movie } from '../../movies/entities/movie.entity';
 
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -8,7 +8,9 @@ export class MovieCast {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Movie, (movie) => movie.movieCast)
+  @ManyToOne(() => Movie, (movie) => movie.movieCast, {
+    onDelete: 'CASCADE',
+  })
   movie: Movie;
 
   @ManyToOne(() => Actor, (actor) => actor.movieCast)

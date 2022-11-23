@@ -1,6 +1,5 @@
-import { Director } from 'src/directors/entities/director.entity';
-import { Genre } from 'src/genres/entities/genre.entity';
-import { Movie } from 'src/movies/entities/movie.entity';
+import { Genre } from '../../genres/entities/genre.entity';
+import { Movie } from '../../movies/entities/movie.entity';
 
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -9,7 +8,9 @@ export class MovieGenre {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Movie, (movie) => movie.movieGenre)
+  @ManyToOne(() => Movie, (movie) => movie.movieGenre, {
+    onDelete: 'CASCADE',
+  })
   movie: Movie;
 
   @ManyToOne(() => Genre, (genre) => genre.movieGenre)

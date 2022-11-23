@@ -24,11 +24,13 @@ export class ReviewersService {
   }
 
   findOne(id: string) {
-    return this.reviewersRepository.findOneBy({ id });
+    return this.reviewersRepository.findOneByOrFail({ id });
   }
 
   async update(id: string, updateReviewerDto: UpdateReviewerDto) {
-    const reviewerToUpdate = await this.reviewersRepository.findOneBy({ id });
+    const reviewerToUpdate = await this.reviewersRepository.findOneByOrFail({
+      id,
+    });
 
     return this.reviewersRepository.save({
       ...reviewerToUpdate,
@@ -37,7 +39,9 @@ export class ReviewersService {
   }
 
   async remove(id: string) {
-    const reviewerToRemove = await this.reviewersRepository.findOneBy({ id });
+    const reviewerToRemove = await this.reviewersRepository.findOneByOrFail({
+      id,
+    });
 
     return this.reviewersRepository.remove(reviewerToRemove);
   }

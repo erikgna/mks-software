@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  DeleteDateColumn,
   BeforeInsert,
 } from 'typeorm';
 import { hashSync } from 'bcrypt';
@@ -32,11 +31,19 @@ export class User {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: string;
 
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: string;
-
   @BeforeInsert()
   hashPassword() {
     this.password = hashSync(this.password, 12);
+  }
+}
+
+export class UserTest extends User {
+  constructor(user?: Partial<User>) {
+    super();
+    this.id = user.id;
+    this.firstName = user.firstName;
+    this.lastName = user.lastName;
+    this.email = user.email;
+    this.password = user.password;
   }
 }
