@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Actor, ActorTest } from './entities/Actor.entity';
+import { Actor, ActorTest } from './entities/actor.entity';
 
-import { ActorsService } from './Actors.service';
+import { ActorsService } from './actors.service';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateActorDto } from './dto/create-actor.dto';

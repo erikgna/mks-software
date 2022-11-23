@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ActorsController } from './Actors.controller';
-import { ActorsService } from './Actors.service';
+import { ActorsController } from './actors.controller';
+import { ActorsService } from './actors.service';
 import { CreateActorDto } from './dto/create-actor.dto';
 import { ActorTest } from './entities/actor.entity';
 
