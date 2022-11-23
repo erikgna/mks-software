@@ -21,6 +21,7 @@ docker compose up
 ```
 
 ## Tests
+Abra um terminal no Docker do app
 
 ```bash
 npm test
