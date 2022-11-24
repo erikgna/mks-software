@@ -34,3 +34,19 @@ Root:
 
 Swagger:
 [http://localhost:8080/swagger](http://localhost:8080/swagger)
+
+## Experiências
+### Docker
+Eu venho trabalhando e estudando Docker por cerca de 6 meses, fiz alguns cursos também.
+
+### Postgres
+Eu venho trabalhando com Postgres e bancos de dados SQL há cerca de 2 anos.
+
+### TypeORM
+Eu tenho usado TypeORM, Prisma e Sequelize há cerca de 2 anos.
+
+### TypeScript
+Eu tenho usado TypeScript para backend e frontend há cerca de 1.5 anos.
+
+### Nest.js / Redis / Swagger
+Eu nunca usei essas tecnologias profissionalmente, apenas em estudos e projetos pessoais.

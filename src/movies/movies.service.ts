@@ -1,21 +1,15 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Redis from 'ioredis';
-import { ActorsService } from '../actors/actors.service';
-import { DirectorsService } from '../directors/directors.service';
-import { GenresService } from '../genres/genres.service';
-import { IORedisKey } from '../microservices/redis/redis.module';
 import { Repository } from 'typeorm';
 
+import { IORedisKey } from '../microservices/redis/redis.module';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieCast } from './entities/cast.entity';
 import { MovieDirection } from './entities/direction.entity';
 import { MovieGenre } from './entities/genre.entity';
 import { Movie } from './entities/movie.entity';
-import { Actor } from 'src/actors/entities/actor.entity';
-import { HttpException } from '@nestjs/common';
-import { HttpStatus } from '@nestjs/common';
 
 @Injectable()
 export class MoviesService {
@@ -32,25 +26,23 @@ export class MoviesService {
     @InjectRepository(MovieGenre)
     private readonly movieGenresRepository: Repository<MovieGenre>,
 
-    private readonly actorsService: ActorsService,
-    private readonly genresService: GenresService,
-    private readonly directorsService: DirectorsService,
-
     @Inject(IORedisKey) private readonly redisClient: Redis,
   ) {}
 
   async create(createMovieDto: CreateMovieDto) {
+    //Verifica se há ao menos um ID de cada entidade
     if (
       createMovieDto.castsID.length === 0 ||
       createMovieDto.directorsID.length === 0 ||
       createMovieDto.genresID.length === 0
     ) {
-      throw Error();
+      throw Error('Insira ao menos um genêro/diretor/ator.');
     }
 
     const createdMovie = await this.moviesRepository.save(
       this.moviesRepository.create(createMovieDto),
     );
+
     try {
       for (const item of createMovieDto.castsID) {
         const cast = this.movieCastsRepository.create({
@@ -81,14 +73,14 @@ export class MoviesService {
       }
       return createdMovie;
     } catch (error) {
+      //Deleta em CASCADE o filme criado e suas entidades
       this.moviesRepository.remove(createdMovie);
-      throw Error();
+      throw Error('Ocorreu um erro ao criar o filme.');
     }
   }
 
   async findAll() {
-    const moviesFromDB = await this.moviesRepository.find();
-
+    //Verifica se há item em cache
     const cachedMovies = (await this.redisClient.call(
       'JSON.GET',
       'all_movies',
@@ -98,6 +90,8 @@ export class MoviesService {
       return JSON.parse(cachedMovies);
     }
 
+    //Se não houver itens em cache, pega do banco de dados e os salva durante 2 minutos
+    const moviesFromDB = await this.moviesRepository.find();
     if (moviesFromDB.length > 0) {
       this.redisClient
         .multi([
@@ -108,7 +102,7 @@ export class MoviesService {
             '.',
             JSON.stringify(moviesFromDB),
           ],
-          ['expire', 'all_movies', 300],
+          ['expire', 'all_movies', 120],
         ])
         .exec();
     }
@@ -151,7 +145,7 @@ export class MoviesService {
       },
     });
     if (checkIfExists.length > 0) {
-      throw Error();
+      throw Error('Esse ator já está neste filme');
     }
 
     return this.movieCastsRepository.save(
@@ -171,7 +165,7 @@ export class MoviesService {
       },
     });
     if (checkIfExists.length > 0) {
-      throw Error();
+      throw Error('Esse diretor já está neste filme');
     }
 
     return this.movieDirectionsRepository.save(
@@ -190,7 +184,7 @@ export class MoviesService {
       },
     });
     if (checkIfExists.length > 0) {
-      throw Error();
+      throw Error('Esse genêro já está neste filme');
     }
 
     return this.movieGenresRepository.save(

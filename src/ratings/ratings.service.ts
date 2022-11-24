@@ -21,7 +21,7 @@ export class RatingsService {
       },
     });
     if (checkRating.length > 0) {
-      throw Error();
+      throw Error('Você já fez uma avaliação neste filme.');
     }
 
     return this.ratingsRepository.save(
