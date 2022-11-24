@@ -10,6 +10,7 @@ import { GenresModule } from './genres/genres.module';
 import { ReviewersModule } from './reviewers/reviewers.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -33,5 +34,6 @@ import { ConfigModule } from '@nestjs/config';
     ReviewersModule,
     RatingsModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
